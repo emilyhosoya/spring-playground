@@ -2,6 +2,9 @@ package com.example.demo;
 
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @RestController
 @RequestMapping("/math")
 public class MathController {
@@ -18,23 +21,34 @@ public class MathController {
         switch (operation) {
             case "add":
                 operand = " + ";
-                result = x + y;
+                result = Math.addExact(x,y);
                 break;
             case "subtract":
                 operand = " - ";
-                result = x - y;
+                result = Math.subtractExact(x,y);
                 break;
             case "multiply":
                 operand = " * ";
-                result = x * y;
+                result = Math.multiplyExact(x,y);
                 break;
             case "divide":
                 operand = " / ";
-                result = x / y;
+                result = Math.floorDiv(x,y);
                 break;
         }
         return x + operand + y + " = " + result;
     }
-    
+
+    @PostMapping("/sum")
+    public String addNumbers(@RequestParam Integer[] n) {
+        int sum = 0;
+        List<String> numStrings = new ArrayList<>();
+        for (int number : n) {
+            sum += number;
+            numStrings.add(String.valueOf(number));
+        }
+        return String.join(" + ", numStrings) + " = " + sum;
+    }
+
 
 }
