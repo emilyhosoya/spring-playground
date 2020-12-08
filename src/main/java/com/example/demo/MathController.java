@@ -9,8 +9,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/math")
 public class MathController {
 
-//    @RequestMapping(method=RequestMethod.GET)
-
     @GetMapping("/pi")
     public double getPi() {
         return Math.PI;

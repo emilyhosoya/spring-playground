@@ -17,7 +17,6 @@ public class MathControllerTest {
     @Autowired
     MockMvc mvc;
 
-
     @Test
     public void testPi() throws Exception {
         RequestBuilder request = MockMvcRequestBuilders.get("/math/pi");
