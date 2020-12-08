@@ -40,7 +40,7 @@ public class MathController {
     }
 
     @PostMapping("/sum")
-    public String addNumbers(@RequestParam Integer[] n) {
+    public String postSum(@RequestParam Integer[] n) {
         int sum = 0;
         List<String> numStrings = new ArrayList<>();
         for (int number : n) {
@@ -49,6 +49,20 @@ public class MathController {
         }
         return String.join(" + ", numStrings) + " = " + sum;
     }
+
+    @PostMapping("/volume/{l}/{w}/{h}")
+    public String postVolume(@PathVariable int l, @PathVariable int w, @PathVariable int h) {
+        int volume = l * w * h;
+        return String.format("The volume of a %dx%dx%d rectangle is " + volume, l, w, h);
+    }
+
+    @PatchMapping("/volume/{l}/{w}/{h}")
+    public String patchVolume(@PathVariable int l, @PathVariable int w, @PathVariable int h) {
+        int volume = l * w * h;
+        return String.format("The volume of a %dx%dx%d rectangle is " + volume, l, w, h);
+    }
+
+    //    @RequestMapping(method=RequestMethod.GET)
 
 
 }

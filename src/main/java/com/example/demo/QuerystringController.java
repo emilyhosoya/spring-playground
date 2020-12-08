@@ -9,8 +9,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/app")
 public class QuerystringController {
 
-//    @RequestMapping(method=RequestMethod.GET)
-
     @GetMapping("/tasks")
     public String getTasks() {
         return "These are tasks";

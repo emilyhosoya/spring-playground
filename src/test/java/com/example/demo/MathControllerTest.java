@@ -7,6 +7,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.RequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -18,7 +20,7 @@ public class MathControllerTest {
     MockMvc mvc;
 
     @Test
-    public void testPi() throws Exception {
+    public void testGetPi() throws Exception {
         RequestBuilder request = MockMvcRequestBuilders.get("/math/pi");
 
         this.mvc.perform(request)
@@ -72,11 +74,31 @@ public class MathControllerTest {
     }
 
     @Test
-    public void testAddNumbers() throws Exception {
-        RequestBuilder request = MockMvcRequestBuilders.post("/math/sum?n=4&n=5&n=6");
+    public void testPostSum() throws Exception {
+        RequestBuilder request = post("/math/sum?n=4&n=5&n=6");
 
         this.mvc.perform(request)
                 .andExpect(status().isOk())
                 .andExpect(content().string("4 + 5 + 6 = 15"));
+    }
+
+    @Test
+    public void testPostVolume() throws Exception {
+        int length = 3, width = 4, height = 5;
+        RequestBuilder request = post(String.format("/math/volume/%d/%d/%d", length, width, height));
+
+        this.mvc.perform(request)
+                .andExpect(status().isOk())
+                .andExpect(content().string("The volume of a 3x4x5 rectangle is 60"));
+    }
+
+    @Test
+    public void testPatchVolume() throws Exception {
+        int length = 6, width = 7, height = 8;
+        RequestBuilder request = patch(String.format("/math/volume/%d/%d/%d", length, width, height));
+
+        this.mvc.perform(request)
+                .andExpect(status().isOk())
+                .andExpect(content().string("The volume of a 6x7x8 rectangle is 336"));
     }
 }
