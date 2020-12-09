@@ -1,9 +1,10 @@
 package com.example.demo;
 
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/math")
@@ -15,39 +16,22 @@ public class MathController {
     }
 
     @GetMapping("/calculate")
-    public String getCalculation(@RequestParam( defaultValue = "add" ) String operation, @RequestParam int x, @RequestParam int y) {
-        String operand = null;
-        int result = 0;
-        switch (operation) {
-            case "add":
-                operand = " + ";
-                result = Math.addExact(x,y);
-                break;
-            case "subtract":
-                operand = " - ";
-                result = Math.subtractExact(x,y);
-                break;
-            case "multiply":
-                operand = " * ";
-                result = Math.multiplyExact(x,y);
-                break;
-            case "divide":
-                operand = " / ";
-                result = Math.floorDiv(x,y);
-                break;
-        }
-        return x + operand + y + " = " + result;
+    public String getCalculation(MathService mathService) {
+        mathService.calculate(mathService.getOperation(), mathService.getX(), mathService.getY());
+        return mathService.calculateMessage;
     }
 
     @PostMapping("/sum")
-    public String postSum(@RequestParam Integer[] n) {
-        int sum = 0;
-        List<String> numStrings = new ArrayList<>();
-        for (int number : n) {
-            sum += number;
-            numStrings.add(String.valueOf(number));
-        }
-        return String.join(" + ", numStrings) + " = " + sum;
+    public String postSum(MathService mathService) {
+        mathService.sum(mathService.getArray());
+        return mathService.sumMessage;
+//        int sum = 0;
+//        List<String> numStrings = new ArrayList<>();
+//        for (int number : n) {
+//            sum += number;
+//            numStrings.add(String.valueOf(number));
+//        }
+//        return String.join(" + ", numStrings) + " = " + sum;
     }
 
     @PostMapping("/volume/{l}/{w}/{h}")
@@ -60,6 +44,12 @@ public class MathController {
     public String patchVolume(@PathVariable int l, @PathVariable int w, @PathVariable int h) {
         int volume = l * w * h;
         return String.format("The volume of a %dx%dx%d rectangle is " + volume, l, w, h);
+    }
+
+    @PostMapping(value = "/area", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
+    public String postArea(@RequestBody MathService mathService) {
+        mathService.area(mathService.getType(), mathService.getRadius(), mathService.getWidth(), mathService.getHeight());
+        return mathService.areaMessage;
     }
 
     //    @RequestMapping(method=RequestMethod.GET)
