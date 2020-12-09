@@ -69,4 +69,32 @@ public class JSONControllerTest {
 ////                .andExpect(jsonPath("$[1].tickets.passenger.lastName", is(null)))
 //                .andExpect(jsonPath("$[1].Tickets.Price", is(400)));
 //    }
+
+    @Test
+    public void testPostForTotal() throws Exception {
+        MockHttpServletRequestBuilder request = post("/flights/tickets/total")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("{\n" +
+                        "  \"tickets\": [\n" +
+                        "    {\n" +
+                        "      \"passenger\": {\n" +
+                        "        \"firstName\": \"Some name\",\n" +
+                        "        \"lastName\": \"Some other name\"\n" +
+                        "      },\n" +
+                        "      \"price\": 200\n" +
+                        "    },\n" +
+                        "    {\n" +
+                        "      \"passenger\": {\n" +
+                        "        \"firstName\": \"Name B\",\n" +
+                        "        \"lastName\": \"Name C\"\n" +
+                        "      },\n" +
+                        "      \"price\": 150\n" +
+                        "    }\n" +
+                        "  ]\n" +
+                        "}");
+
+        this.mvc.perform(request)
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("result", is(350)));
+    }
 }

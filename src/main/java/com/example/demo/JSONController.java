@@ -1,9 +1,7 @@
 package com.example.demo;
 
 import com.fasterxml.jackson.databind.ser.std.CalendarSerializer;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -60,4 +58,13 @@ public class JSONController {
         return flightList;
     }
 
+    @PostMapping("/tickets/total")
+    public String getJSONData(@RequestBody AllTickets allTickets) {
+        int sum = 0;
+        for (Price price : allTickets.getPrices()) {
+            sum += price.getPrice();
+        }
+        allTickets.setTotal(sum);
+        return String.format("{\"result\":%d}", sum);
+    }
 }
