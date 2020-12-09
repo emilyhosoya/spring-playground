@@ -35,4 +35,38 @@ public class JSONControllerTest {
                 .andExpect(jsonPath("$.tickets.passenger.lastName", is("Some other name")))
                 .andExpect(jsonPath("$.tickets.price", is(200)));
     }
+
+    @Test
+    public void testGetFlights() throws Exception {
+        this.mvc.perform(
+                get("/flights/flights")
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$[0].departs", is("2017-04-21 14:34")))
+                .andExpect(jsonPath("$[0].tickets.passenger.firstName", is("Some name")))
+                .andExpect(jsonPath("$[0].tickets.passenger.lastName", is("Some other name")))
+                .andExpect(jsonPath("$[0].tickets.price", is(200)))
+                .andExpect(jsonPath("$[1].departs", is("2017-04-21 14:34")))
+                .andExpect(jsonPath("$[1].tickets.passenger.firstName", is("Some other name")))
+//                .andExpect(jsonPath("$[1].tickets.passenger.lastName", is(null)))
+                .andExpect(jsonPath("$[1].tickets.price", is(400)));
+    }
+
+//    @Test
+//    public void testJSONFormatting() throws Exception {
+//        this.mvc.perform(
+//                get("/flights/flights")
+//                        .accept(MediaType.APPLICATION_JSON)
+//                        .contentType(MediaType.APPLICATION_JSON))
+//                .andExpect(status().isOk())
+//                .andExpect(jsonPath("$[0].Departs", is("2017-04-21 14:34")))
+//                .andExpect(jsonPath("$[0].Tickets.Passenger.FirstName", is("Some name")))
+//                .andExpect(jsonPath("$[0].Tickets.Passenger.LastName", is("Some other name")))
+//                .andExpect(jsonPath("$[0].Tickets.Price", is(200)))
+//                .andExpect(jsonPath("$[1].Departs", is("2017-04-21 14:34")))
+//                .andExpect(jsonPath("$[1].Tickets.Passenger.FirstName", is("Some other name")))
+////                .andExpect(jsonPath("$[1].tickets.passenger.lastName", is(null)))
+//                .andExpect(jsonPath("$[1].Tickets.Price", is(400)));
+//    }
 }
