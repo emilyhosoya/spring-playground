@@ -64,17 +64,17 @@ public class LessonsControllerTest {
 //    @Rollback
 //    public void testGetOne() throws Exception {
 //        Lesson lesson = new Lesson();
-////        lesson.setId(4L);
+//        lesson.setId(3L);
 //        lesson.setTitle("Juggling");
 //        lesson.setDeliveredOn(new Date(2020-12-10));
 //        repository.save(lesson);
 //
-//        MockHttpServletRequestBuilder request = get("/lessons/1")
+//        MockHttpServletRequestBuilder request = get("/lessons/3")
 //                .contentType(MediaType.APPLICATION_JSON);
 //
 //        this.mvc.perform(request)
 //                .andExpect(status().isOk())
-//                .andExpect(jsonPath("$.id", instanceOf(Number.class) ));
+//                .andExpect(jsonPath("id", instanceOf(Number.class) ));
 //    }
 //    @Test
 //    @Transactional
@@ -92,5 +92,20 @@ public class LessonsControllerTest {
 //        this.mvc.perform(request)
 //            .andExpect(status().isOk());
 //            .andExpect(jsonPath("$.id", instanceOf(Number.class) ));
+
+    @Test
+    @Transactional
+    @Rollback
+    public void testPatch() throws Exception {
+        MockHttpServletRequestBuilder request = patch("/lessons/1")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("{\"title\": \"Spring Security\", \"deliveredOn\": \"2017-04-12\"}");
+
+        this.mvc.perform(request)
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("id", equalTo(1)))
+                .andExpect(jsonPath("title", equalTo("Spring Security")))
+                .andExpect(jsonPath("deliveredOn", equalTo("2017-04-12")));
+    }
 
 }
