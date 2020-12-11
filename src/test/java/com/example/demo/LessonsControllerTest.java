@@ -11,9 +11,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.Calendar;
 import java.util.Date;
 
 import static org.hamcrest.core.IsEqual.equalTo;
@@ -66,34 +63,33 @@ public class LessonsControllerTest {
 //    @Rollback
 //    public void testGetOne() throws Exception {
 //        Lesson lesson = new Lesson();
-//        lesson.setId(3L);
 //        lesson.setTitle("Juggling");
 //        lesson.setDeliveredOn(new Date(2020-12-10));
 //        repository.save(lesson);
 //
-//        MockHttpServletRequestBuilder request = get("/lessons/3")
+//        MockHttpServletRequestBuilder request = get("/lessons/1")
 //                .contentType(MediaType.APPLICATION_JSON);
 //
 //        this.mvc.perform(request)
 //                .andExpect(status().isOk())
-//                .andExpect(jsonPath("id", instanceOf(Number.class) ));
+//                .andExpect(jsonPath("$.id", instanceOf(Number.class) ));
 //    }
 //    @Test
 //    @Transactional
 //    @Rollback
 //    public void testDelete() throws Exception {
 //        Lesson lesson = new Lesson();
-//        lesson.setId(1L);
 //        lesson.setTitle("Juggling");
-//        lesson.setDeliveredOn(new Date(2020-12-10));
+//        lesson.setDeliveredOn(new Date(2020,12,10));
 //        repository.save(lesson);
 //
 //        MockHttpServletRequestBuilder request = delete("/lessons/1")
-//            .contentType(MediaType.APPLICATION_JSON);
+//                .contentType(MediaType.APPLICATION_JSON);
 //
 //        this.mvc.perform(request)
-//            .andExpect(status().isOk());
-//            .andExpect(jsonPath("$.id", instanceOf(Number.class) ));
+//                .andExpect(status().isOk());
+////            .andExpect(jsonPath("$.id", instanceOf(Number.class) ));
+//    }
 
     @Test
     @Transactional
@@ -105,9 +101,9 @@ public class LessonsControllerTest {
 
         this.mvc.perform(request)
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("id", equalTo(1)))
-                .andExpect(jsonPath("title", equalTo("Spring Security")))
-                .andExpect(jsonPath("deliveredOn", equalTo("2017-04-12")));
+                .andExpect(jsonPath("$.id", equalTo(1)))
+                .andExpect(jsonPath("$.title", equalTo("Spring Security")))
+                .andExpect(jsonPath("$.deliveredOn", equalTo("2017-04-12")));
     }
 
     @Test
@@ -115,7 +111,6 @@ public class LessonsControllerTest {
     @Rollback
     public void testFindByTitle() throws Exception {
         Lesson lesson = new Lesson();
-        lesson.setId(34349L);
         lesson.setTitle("Juggling");
         lesson.setDeliveredOn(new Date(2020,12,10));
         repository.save(lesson);
@@ -125,7 +120,7 @@ public class LessonsControllerTest {
 
         this.mvc.perform(request)
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("title", equalTo("Juggling")));
+                .andExpect(jsonPath("$.title", equalTo("Juggling")));
     }
 
     @Test
@@ -133,19 +128,16 @@ public class LessonsControllerTest {
     @Rollback
     public void testFindByDates() throws Exception {
         Lesson lesson = new Lesson();
-        lesson.setId(1L);
         lesson.setTitle("Dependency Injection");
         lesson.setDeliveredOn(new Date(2014,02,17));
         repository.save(lesson);
 
         Lesson lesson2 = new Lesson();
-        lesson2.setId(2L);
         lesson2.setTitle("Transactions");
         lesson2.setDeliveredOn(new Date(2015,02,17));
         repository.save(lesson2);
 
         Lesson lesson3 = new Lesson();
-        lesson3.setId(3L);
         lesson3.setTitle("Underwater Basket Weaving");
         lesson3.setDeliveredOn(new Date(2020,11,10));
         repository.save(lesson3);

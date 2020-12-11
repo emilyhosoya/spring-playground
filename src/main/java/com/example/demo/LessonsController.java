@@ -31,12 +31,12 @@ public class LessonsController {
         return this.repository.save(lesson);
     }
 
-    @GetMapping("/{id}")
+    @GetMapping(path="/{id}", consumes="application/json")
     public Optional<Lesson> getOne(@PathVariable Long id) {
         return this.repository.findById(id);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping(path="/{id}", consumes="application/json")
     public void delete(@PathVariable Long id) {
         this.repository.deleteById(id);
     }
@@ -55,9 +55,8 @@ public class LessonsController {
         return this.repository.findByTitle(title);
     }
 
-    @GetMapping("/between")
-    public ArrayList<Lesson> findLessonsBetween(@Param("startDate") String date1, @Param("endDate") String date2) {
-        System.out.println(this.repository.findByDateRange(date1, date2));
+    @GetMapping(path="/between", consumes="application/json")
+    public Iterable<Lesson> findLessonsBetween(@Param("startDate") String date1, @Param("endDate") String date2) {
         return this.repository.findByDateRange(date1, date2);
     };
 }

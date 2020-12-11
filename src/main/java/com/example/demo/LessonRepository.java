@@ -11,5 +11,5 @@ public interface LessonRepository extends CrudRepository<Lesson, Long> {
     Lesson findByTitle(String title);
 
     @Query(value = "SELECT * FROM lessons WHERE (delivered_on BETWEEN :startDate AND :endDate)", nativeQuery = true)
-    ArrayList<Lesson> findByDateRange(@Param("startDate") String date1, @Param("endDate") String date2);
+    Iterable<Lesson> findByDateRange(@Param("startDate") String date1, @Param("endDate") String date2);
 }
