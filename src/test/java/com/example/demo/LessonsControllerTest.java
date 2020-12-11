@@ -11,13 +11,15 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.Calendar;
 import java.util.Date;
 
 import static org.hamcrest.core.IsEqual.equalTo;
 import static org.hamcrest.core.IsInstanceOf.instanceOf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -48,7 +50,7 @@ public class LessonsControllerTest {
     public void testListAll() throws Exception {
         Lesson lesson = new Lesson();
         lesson.setTitle("Juggling");
-        lesson.setDeliveredOn(new Date(2020-12-10));
+        lesson.setDeliveredOn(new Date(2020,12,10));
         repository.save(lesson);
 
         MockHttpServletRequestBuilder request = get("/lessons")
@@ -106,6 +108,55 @@ public class LessonsControllerTest {
                 .andExpect(jsonPath("id", equalTo(1)))
                 .andExpect(jsonPath("title", equalTo("Spring Security")))
                 .andExpect(jsonPath("deliveredOn", equalTo("2017-04-12")));
+    }
+
+    @Test
+    @Transactional
+    @Rollback
+    public void testFindByTitle() throws Exception {
+        Lesson lesson = new Lesson();
+        lesson.setId(34349L);
+        lesson.setTitle("Juggling");
+        lesson.setDeliveredOn(new Date(2020,12,10));
+        repository.save(lesson);
+
+        MockHttpServletRequestBuilder request = get("/lessons/find/Juggling")
+                .contentType(MediaType.APPLICATION_JSON);
+
+        this.mvc.perform(request)
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("title", equalTo("Juggling")));
+    }
+
+    @Test
+    @Transactional
+    @Rollback
+    public void testFindByDates() throws Exception {
+        Lesson lesson = new Lesson();
+        lesson.setId(1L);
+        lesson.setTitle("Dependency Injection");
+        lesson.setDeliveredOn(new Date(2014,02,17));
+        repository.save(lesson);
+
+        Lesson lesson2 = new Lesson();
+        lesson2.setId(2L);
+        lesson2.setTitle("Transactions");
+        lesson2.setDeliveredOn(new Date(2015,02,17));
+        repository.save(lesson2);
+
+        Lesson lesson3 = new Lesson();
+        lesson3.setId(3L);
+        lesson3.setTitle("Underwater Basket Weaving");
+        lesson3.setDeliveredOn(new Date(2020,11,10));
+        repository.save(lesson3);
+
+        MockHttpServletRequestBuilder request = get("/lessons/between?date1=2014-01-01&date2=2017-12-31")
+                .contentType(MediaType.APPLICATION_JSON);
+
+        this.mvc.perform(request)
+                .andExpect(status().isOk());
+//                .andExpect(jsonPath("$[0].title", equalTo("Dependency Injection")))
+//                .andExpect(jsonPath("$[1].title", equalTo("Transactions")));
     }
 
 }
