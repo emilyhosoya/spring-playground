@@ -58,22 +58,22 @@ public class LessonsControllerTest {
                 .andExpect(jsonPath("$[0].id", equalTo(lesson.getId().intValue()) ));
     }
 
-//    @Test
-//    @Transactional
-//    @Rollback
-//    public void testGetOne() throws Exception {
-//        Lesson lesson = new Lesson();
-//        lesson.setTitle("Juggling");
-//        lesson.setDeliveredOn(new Date(2020-12-10));
-//        repository.save(lesson);
-//
-//        MockHttpServletRequestBuilder request = get("/lessons/1")
-//                .contentType(MediaType.APPLICATION_JSON);
-//
-//        this.mvc.perform(request)
-//                .andExpect(status().isOk())
-//                .andExpect(jsonPath("$.id", instanceOf(Number.class) ));
-//    }
+    @Test
+    @Transactional
+    @Rollback
+    public void testGetOne() throws Exception {
+        Lesson lesson = new Lesson();
+        lesson.setTitle("Juggling");
+        lesson.setDeliveredOn(new Date(2020,12,10));
+        repository.save(lesson);
+
+        MockHttpServletRequestBuilder request = get("/lessons/1")
+                .contentType(MediaType.APPLICATION_JSON);
+
+        this.mvc.perform(request)
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id", instanceOf(Number.class) ));
+    }
 //    @Test
 //    @Transactional
 //    @Rollback

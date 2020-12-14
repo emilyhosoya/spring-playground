@@ -4,9 +4,6 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 
-import java.util.ArrayList;
-import java.util.Date;
-
 public interface LessonRepository extends CrudRepository<Lesson, Long> {
     Lesson findByTitle(String title);
 
